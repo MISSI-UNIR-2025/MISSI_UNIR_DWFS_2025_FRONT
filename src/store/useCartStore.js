@@ -2,6 +2,7 @@ import { create } from 'zustand';
 
 const useCartStore = create((set) => ({
     cart: [],
+    modalCartStatus:false,
     addToCart: (book) => set((state) => {
         const existingItem = state.cart.find((item) => item.id === book.id);
         if (existingItem) {
@@ -17,6 +18,8 @@ const useCartStore = create((set) => ({
         cart: state.cart.filter((item) => item.id !== bookId),
     })),
     clearCart: () => set({ cart: [] }),
+    openCart: () => {console.log('here'), set({ modalCartStatus:true })},
+    closeCart: () => set({ modalCartStatus:false }),
 }));
 
 export default useCartStore;

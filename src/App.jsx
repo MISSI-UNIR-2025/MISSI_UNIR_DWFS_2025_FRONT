@@ -5,15 +5,18 @@ import HomePage from './pages/HomePage';
 import BookDetailPage from './pages/BookDetailPage';
 import CheckoutPage from './pages/CheckoutPage';
 import './App.css';
+import Layout from './layout/Layout';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/book/:id" element={<BookDetailPage />} />
-        <Route path="/checkout" element={<CheckoutPage />} />
+        <Route element={<Layout />}>
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/book/:id" element={<BookDetailPage />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

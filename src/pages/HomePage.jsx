@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Input, Card, Rate, Tag, Typography, Button } from 'antd';
 import { SearchOutlined, ShoppingCartOutlined, EyeOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import Layout from '../components/Layout';
 import { books } from '../data/books';
 import useCartStore from '../store/useCartStore';
 
+
 const { Title, Text } = Typography;
-const { Meta } = Card;
 
 const HomePage = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -19,10 +18,10 @@ const HomePage = () => {
     );
 
     return (
-        <Layout>
-            {/* Hero / Header Section */}
+        <>
+         {/* Hero / Header Section */}
             <div className="mb-12 text-center">
-                <Title level={1} className="!mb-2 !text-4xl font-bold text-gray-800">
+                <Title level={1} className="mb-2! text-4xl! font-bold text-gray-800">
                     Library Collection
                 </Title>
                 <Text className="text-gray-500 text-lg">
@@ -88,7 +87,7 @@ const HomePage = () => {
                                         {book.category}
                                     </Tag>
                                 </div>
-                                <Title level={5} className="!mb-1 line-clamp-1" title={book.title}>
+                                <Title level={5} className="mb-1! line-clamp-1" title={book.title}>
                                     {book.title}
                                 </Title>
                                 <Text type="secondary" className="mb-2 block text-sm">
@@ -106,7 +105,8 @@ const HomePage = () => {
                     <Text type="secondary" className="text-lg">No books found matching "{searchTerm}"</Text>
                 </div>
             )}
-        </Layout>
+          
+        </>
     );
 };
 

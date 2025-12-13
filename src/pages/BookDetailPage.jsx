@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Typography, Button, Tag, Rate, Breadcrumb, message } from 'antd';
 import { ShoppingCartOutlined, ArrowLeftOutlined, CheckOutlined } from '@ant-design/icons';
-import Layout from '../components/Layout';
+import Layout from '../layout/Layout';
 import { books } from '../data/books';
 import useCartStore from '../store/useCartStore';
 
@@ -36,7 +36,7 @@ const BookDetailPage = () => {
     };
 
     return (
-        <Layout>
+        <>
             <div className="mb-8">
                 <Breadcrumb
                     items={[
@@ -67,7 +67,7 @@ const BookDetailPage = () => {
                             </Tag>
                         </div>
 
-                        <Title level={1} className="!mb-2 !text-4xl font-bold text-gray-900">
+                        <Title level={1} className="mb-2! text-4xl! font-bold text-gray-900">
                             {book.title}
                         </Title>
 
@@ -115,7 +115,7 @@ const BookDetailPage = () => {
                     </div>
                 </div>
             </div>
-        </Layout>
+        </>
     );
 };
 

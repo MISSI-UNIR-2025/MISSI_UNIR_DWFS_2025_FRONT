@@ -1,8 +1,6 @@
-import React from 'react';
 import { Typography, List, Button, Divider, message, Result } from 'antd';
 import { CreditCardOutlined, HomeOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import Layout from '../components/Layout';
 import useCartStore from '../store/useCartStore';
 
 const { Title, Text } = Typography;
@@ -29,7 +27,7 @@ const CheckoutPage = () => {
 
     if (cart.length === 0) {
         return (
-            <Layout>
+            
                 <div className="min-h-[60vh] flex items-center justify-center">
                     <Result
                         status="info"
@@ -42,12 +40,12 @@ const CheckoutPage = () => {
                         }
                     />
                 </div>
-            </Layout>
+           
         );
     }
 
     return (
-        <Layout>
+       
             <div className="max-w-3xl mx-auto">
                 <Title level={2} className="mb-8 text-center">Checkout</Title>
 
@@ -100,7 +98,7 @@ const CheckoutPage = () => {
                     </div>
                 </div>
             </div>
-        </Layout>
+      
     );
 };
 

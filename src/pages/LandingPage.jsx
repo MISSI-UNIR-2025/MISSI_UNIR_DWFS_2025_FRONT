@@ -17,7 +17,7 @@ const LandingPage = () => {
     }, [navigate]);
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50 overflow-hidden relative">
+        <div className="min-h-screen flex flex-col items-center justify-center bg-linear-to-br from-indigo-50 via-white to-purple-50 overflow-hidden relative">
             {/* Decorative blobs */}
             <div className="absolute top-0 left-0 w-96 h-96 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
             <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
@@ -33,7 +33,7 @@ const LandingPage = () => {
                     />
                 </div>
 
-                <Title className="!text-6xl !font-black !mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-violet-600 tracking-tight">
+                <Title className="text-6xl! font-black! mb-4! bg-clip-text text-transparent bg-linear-to-r from-indigo-600 to-violet-600 tracking-tight">
                     BookStore
                 </Title>
 
