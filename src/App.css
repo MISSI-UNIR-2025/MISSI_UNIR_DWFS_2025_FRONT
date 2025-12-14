@@ -3,3 +3,10 @@ body {
   height: 100%;
   overflow: hidden;
 }
+
+
+.purple-dot-background {
+
+  background-image: radial-gradient(circle, #6366f1 0.5px, transparent 0.5px);
+  background-size: 40px 40px;
+}

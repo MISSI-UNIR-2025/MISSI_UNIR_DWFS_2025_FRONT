@@ -15,9 +15,7 @@ export const fetchGoogleBooks = async ({ query, startIndex, limit }) => {
       id: item.id,
       title: info.title ?? 'Untitled',
       author: info.authors?.join(', ') ?? 'Unknown author',
-      image:
-        info.imageLinks?.thumbnail ??
-        'https://via.placeholder.com/300x450?text=No+Cover',
+      image:info.imageLinks?.thumbnail ?? 'emptyImage',
       description: info.description ?? '',
       category: info.categories?.[0] ?? 'General',
       price: +(Math.random() * (40 - 10) + 10).toFixed(2),
