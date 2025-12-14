@@ -1,10 +1,12 @@
 import { Input, Typography } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import useBooksStore from '../../store/useBooksStore';
+import { useGoogleBooks } from '../../hooks/useGoogleBooks';
 
 const { Title, Text } = Typography;
 
 const BooksSearch = () => {
+  const { fetchBooks } = useGoogleBooks();
   const { inputValue, setInputValue, searchBooks } = useBooksStore();
 
   const onChange = (e) => {
@@ -12,7 +14,7 @@ const BooksSearch = () => {
     setInputValue(value);
 
     if (value.trim().length >= 5 || value.trim().length === 0) {
-      searchBooks();
+      searchBooks(fetchBooks);
     }
   };
 

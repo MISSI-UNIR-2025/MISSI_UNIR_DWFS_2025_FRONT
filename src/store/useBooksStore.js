@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { fetchGoogleBooks } from '../services/googleBooks.service';
 
 const PAGE_SIZE = 20;
 const MIN_SEARCH_CHARS = 5;
@@ -20,42 +19,50 @@ const useBooksStore = create((set, get) => ({
   loading: false,
   hasMore: true,
 
-  setInputValue: (value) => {
-    set({ inputValue: value });
+  setInputValue: (value) => set({ inputValue: value }),
+
+  resetSearch: () =>
+    set({
+      books: [],
+      startIndex: 0,
+      hasMore: true,
+    }),
+
+  loadMoreBooks: async (fetchBooks) => {
+    const { loading, hasMore, query, startIndex } = get();
+    if (loading || !hasMore) return;
+
+    set({ loading: true });
+
+    const newBooks = await fetchBooks({ query, startIndex });
+
+    set((state) => ({
+      books: [...state.books, ...newBooks],
+      startIndex: state.startIndex + PAGE_SIZE,
+      hasMore: newBooks.length > 0,
+      loading: false,
+    }));
   },
 
-  searchBooks: async () => {
+  searchBooks: async (fetchBooks) => {
     const { inputValue } = get();
     const query = buildQuery(inputValue);
 
     set({
       query,
-      startIndex: 0,
       books: [],
+      startIndex: 0,
       hasMore: true,
     });
 
-    await get().loadMoreBooks(true);
-  },
+    const newBooks = await fetchBooks({ query, startIndex: 0 });
 
-  loadMoreBooks: async (reset = false) => {
-    const { loading, hasMore, query, startIndex } = get();
-    if (loading || (!hasMore && !reset)) return;
-
-    set({ loading: true });
-
-    const books = await fetchGoogleBooks({
-      query,
-      startIndex: reset ? 0 : startIndex,
-      limit: PAGE_SIZE,
-    });
-
-    set((state) => ({
-      books: reset ? books : [...state.books, ...books],
-      startIndex: reset ? PAGE_SIZE : state.startIndex + PAGE_SIZE,
-      hasMore: books.length > 0,
+    set({
+      books: newBooks,
+      startIndex: PAGE_SIZE,
+      hasMore: newBooks.length > 0,
       loading: false,
-    }));
+    });
   },
 }));
 
