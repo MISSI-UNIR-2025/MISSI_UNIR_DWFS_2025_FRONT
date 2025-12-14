@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 
-const useCartStore = create((set) => ({
+const useCartStore = create((set, get) => ({
     cart: [],
-    modalCartStatus:false,
+    modalCartStatus: false,
     addToCart: (book) => set((state) => {
         const existingItem = state.cart.find((item) => item.id === book.id);
         if (existingItem) {
@@ -18,8 +18,23 @@ const useCartStore = create((set) => ({
         cart: state.cart.filter((item) => item.id !== bookId),
     })),
     clearCart: () => set({ cart: [] }),
-    openCart: () => {console.log('here'), set({ modalCartStatus:true })},
-    closeCart: () => set({ modalCartStatus:false }),
+    openCart: () => set({ modalCartStatus: true }),
+    closeCart: () => set({ modalCartStatus: false }),
+    increaseQty: (id) =>
+        set({
+            cart: get().cart.map((i) =>
+                i.id === id ? { ...i, quantity: i.quantity + 1 } : i
+            ),
+        }),
+
+    decreaseQty: (id) =>
+        set({
+            cart: get().cart.map((i) =>
+                i.id === id
+                    ? { ...i, quantity: Math.max(1, i.quantity - 1) }
+                    : i
+            ),
+        }),
 }));
 
 export default useCartStore;

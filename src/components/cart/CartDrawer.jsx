@@ -1,14 +1,20 @@
-import React from 'react';
-import { Drawer, List, Button, Typography, Empty, message } from 'antd';
-import { DeleteOutlined, ShoppingOutlined } from '@ant-design/icons';
+import { Drawer, List, Button, Typography, Empty } from 'antd';
+import { DeleteOutlined, ShoppingOutlined, PlusOutlined, MinusOutlined } from '@ant-design/icons';
+
 import { useNavigate } from 'react-router-dom';
 import useCartStore from '../../store/useCartStore';
 
 const { Text, Title } = Typography;
 
 const CartDrawer = () => {
-    const { cart, removeFromCart  , closeCart , modalCartStatus } = useCartStore((state) => state);
-    const navigate = useNavigate();
+    const {
+        cart,
+        removeFromCart,
+        increaseQty,
+        decreaseQty,
+        closeCart,
+        modalCartStatus,
+    } = useCartStore(); const navigate = useNavigate();
 
     const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
@@ -28,7 +34,7 @@ const CartDrawer = () => {
             placement="right"
             onClose={closeCart}
             open={modalCartStatus}
-           
+
             className="backdrop-blur-sm"
         >
             {cart === undefined ? (
@@ -75,9 +81,22 @@ const CartDrawer = () => {
                                                     <Text className="text-indigo-600 font-medium">
                                                         ${item.price.toFixed(2)}
                                                     </Text>
-                                                    <Text type="secondary" className="text-xs">
-                                                        Qty: {item.quantity}
-                                                    </Text>
+                                                    <div className="flex items-center gap-2">
+                                                        <Button
+                                                            size="small"
+                                                            icon={<MinusOutlined />}
+                                                            onClick={() => decreaseQty(item.id)}
+                                                            disabled={item.quantity === 1}
+                                                        />
+
+                                                        <Text className="w-6 text-center">{item.quantity}</Text>
+
+                                                        <Button
+                                                            size="small"
+                                                            icon={<PlusOutlined />}
+                                                            onClick={() => increaseQty(item.id)}
+                                                        />
+                                                    </div>
                                                 </div>
                                             </div>
                                         }
