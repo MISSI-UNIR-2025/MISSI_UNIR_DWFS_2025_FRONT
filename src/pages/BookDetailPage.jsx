@@ -1,122 +1,92 @@
-import React from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Typography, Button, Tag, Rate, Breadcrumb, message } from 'antd';
-import { ShoppingCartOutlined, ArrowLeftOutlined, CheckOutlined } from '@ant-design/icons';
-import Layout from '../layout/Layout';
-import { books } from '../data/books';
-import useCartStore from '../store/useCartStore';
+import { message } from 'antd';
+import { CheckOutlined } from '@ant-design/icons';
 
-const { Title, Text, Paragraph } = Typography;
+import useCartStore from '../store/useCartStore';
+import useBooksStore from '../store/useBooksStore';
+
+import BookBreadcrumb from '../components/book-detail/BookBreadcrumb';
+import BookNotFound from '../components/book-detail/BookNotFound';
+import BookCover from '../components/book-detail/BookCover';
+import BookMeta from '../components/book-detail/BookMeta';
+import BookActions from '../components/book-detail/BookActions';
+
+const mapGoogleVolumeToBook = (item) => {
+  const info = item?.volumeInfo ?? {};
+  return {
+    id: item.id,
+    title: info.title ?? 'Untitled',
+    author: info.authors?.join(', ') ?? 'Unknown author',
+    image:
+      info.imageLinks?.thumbnail ??
+      'https://via.placeholder.com/300x450?text=No+Cover',
+    description: info.description ?? '',
+    category: info.categories?.[0] ?? 'General',
+    price: +(Math.random() * (40 - 10) + 10).toFixed(2),
+  };
+};
 
 const BookDetailPage = () => {
-    const { id } = useParams();
-    const navigate = useNavigate();
-    const addToCart = useCartStore((state) => state.addToCart);
+  const { id } = useParams(); // Google Books volumeId
+  const navigate = useNavigate();
 
-    const book = books.find((b) => b.id === parseInt(id));
+  const addToCart = useCartStore((s) => s.addToCart);
+  const books = useBooksStore((s) => s.books);
 
-    if (!book) {
-        return (
-            <Layout>
-                <div className="text-center py-20">
-                    <Title level={3}>Book not found</Title>
-                    <Button onClick={() => navigate('/home')}>Return to Library</Button>
-                </div>
-            </Layout>
-        );
+  const bookFromStore = useMemo(() => books.find((b) => b.id === id), [books, id]);
+  const [book, setBook] = useState(bookFromStore ?? null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (bookFromStore) {
+      setBook(bookFromStore);
+      setLoading(false);
+     
     }
 
-    const handleAddToCart = () => {
-        addToCart(book);
-        message.success({
-            content: 'Added to cart',
-            icon: <CheckOutlined className="text-green-500" />,
-            className: 'mt-10',
-        });
-    };
 
-    return (
-        <>
-            <div className="mb-8">
-                <Breadcrumb
-                    items={[
-                        { title: <a onClick={() => navigate('/home')}>Home</a> },
-                        { title: book.title },
-                    ]}
-                />
-            </div>
+  }, [ bookFromStore]);
 
-            <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
-                    {/* Image Section */}
-                    <div className="md:col-span-4 lg:col-span-3">
-                        <div className="relative rounded-xl overflow-hidden shadow-2xl transform hover:scale-105 transition-transform duration-500">
-                            <img
-                                src={book.image}
-                                alt={book.title}
-                                className="w-full h-auto object-cover"
-                            />
-                        </div>
-                    </div>
+  const handleAddToCart = () => {
+    if (!book) return;
+    addToCart(book);
+    message.success({
+      content: 'Added to cart',
+      icon: <CheckOutlined className="text-green-500" />,
+      className: 'mt-10',
+    });
+  };
 
-                    {/* Details Section */}
-                    <div className="md:col-span-8 lg:col-span-9 flex flex-col justify-center">
-                        <div className="mb-2">
-                            <Tag color="purple" className="px-3 py-1 rounded-full text-sm font-medium">
-                                {book.category}
-                            </Tag>
-                        </div>
+  if (loading) {
+    return <div className="py-24 text-center">Loading...</div>;
+  }
 
-                        <Title level={1} className="mb-2! text-4xl! font-bold text-gray-900">
-                            {book.title}
-                        </Title>
+  if (!book) {
+    return <BookNotFound onBack={() => navigate('/home')} />;
+  }
 
-                        <Text className="text-xl text-gray-500 mb-6 block">
-                            by <span className="text-indigo-600 font-medium">{book.author}</span>
-                        </Text>
+  return (
+    <>
+      <BookBreadcrumb onHome={() => navigate('/home')} title={book.title} />
 
-                        <div className="flex items-center gap-4 mb-8">
-                            <Rate disabled defaultValue={4.5} className="text-yellow-400" />
-                            <Text type="secondary" className="text-sm">(128 reviews)</Text>
-                        </div>
+      <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
+          <BookCover image={book.image} title={book.title} />
 
-                        <Paragraph className="text-lg text-gray-600 leading-relaxed max-w-2xl mb-8">
-                            {book.description}
-                        </Paragraph>
+          <div className="md:col-span-8 lg:col-span-9">
+            <BookMeta book={book} />
 
-                        <div className="flex items-center gap-8 border-t border-gray-100 pt-8">
-                            <div className="flex flex-col">
-                                <Text type="secondary" className="text-sm">Price</Text>
-                                <Text className="text-3xl font-bold text-gray-900">
-                                    ${book.price}
-                                </Text>
-                            </div>
-
-                            <div className="flex gap-4">
-                                <Button
-                                    type="primary"
-                                    size="large"
-                                    icon={<ShoppingCartOutlined />}
-                                    onClick={handleAddToCart}
-                                    className="bg-indigo-600 hover:bg-indigo-700 h-14 px-8 text-lg rounded-xl shadow-lg shadow-indigo-200"
-                                >
-                                    Add to Cart
-                                </Button>
-                                <Button
-                                    size="large"
-                                    icon={<ArrowLeftOutlined />}
-                                    onClick={() => navigate('/home')}
-                                    className="h-14 px-6 text-lg rounded-xl border-gray-200 hover:border-indigo-600 hover:text-indigo-600"
-                                >
-                                    Back
-                                </Button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </>
-    );
+            <BookActions
+              price={book.price}
+              onAdd={handleAddToCart}
+              onBack={() => navigate('/home')}
+            />
+          </div>
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default BookDetailPage;

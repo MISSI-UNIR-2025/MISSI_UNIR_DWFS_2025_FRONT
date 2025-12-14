@@ -2,7 +2,7 @@ import React from 'react';
 import { Drawer, List, Button, Typography, Empty, message } from 'antd';
 import { DeleteOutlined, ShoppingOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import useCartStore from '../store/useCartStore';
+import useCartStore from '../../store/useCartStore';
 
 const { Text, Title } = Typography;
 
