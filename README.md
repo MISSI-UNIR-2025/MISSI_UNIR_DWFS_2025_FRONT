@@ -4,7 +4,7 @@ This is a book store front built to gruop 6 from the [DWFS - UNIR 2026]
 
 ## Prerequisites
 
-- Node.js version 20.x
+- Node.js version 22.x
 - NPM version 8.x
 
 ## Installation

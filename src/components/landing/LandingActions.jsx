@@ -6,7 +6,7 @@ const { Text } = Typography;
 const LandingActions = ({ seconds, onEnter }) => {
   return (
     <div className="flex flex-col items-center gap-4">
-      <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />
+      <Spin indicator={<LoadingOutlined  spin />} />
 
       <Text type="secondary" className="text-sm">
         Redirecting to library in <b>{seconds}</b> seconds...
