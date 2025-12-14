@@ -1,1 +1,110 @@
-/* App.css cleaned up to avoid conflicts with Tailwind */
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+
+.purple-dot-background {
+
+  background-image: radial-gradient(circle, #6366f1 0.5px, transparent 0.5px);
+  background-size: 40px 40px;
+}
+
+.wave-stop-indigo-1 {
+  stop-color: #4f46e5;
+  stop-opacity: 0.18;
+}
+
+.wave-stop-indigo-2 {
+  stop-color: #6366f1;
+  stop-opacity: 0.25;
+}
+
+.wave-stop-indigo-3 {
+  stop-color: #818cf8;
+  stop-opacity: 0.18;
+}
+
+.wave-stop-cyan-1 {
+  stop-color: #0ea5e9;
+  stop-opacity: 0.15;
+}
+
+.wave-stop-cyan-2 {
+  stop-color: #06b6d4;
+  stop-opacity: 0.22;
+}
+
+.wave-stop-cyan-3 {
+  stop-color: #22d3ee;
+  stop-opacity: 0.15;
+}
+
+/* Líneas superiores */
+.wave-line-indigo-strong {
+  stroke: #6366f1;
+  stroke-width: 1.5;
+  fill: none;
+  opacity: 0.3;
+}
+
+.wave-line-indigo-medium {
+  stroke: #6366f1;
+  stroke-width: 1.2;
+  fill: none;
+  opacity: 0.25;
+}
+
+.wave-line-indigo-light {
+  stroke: #818cf8;
+  stroke-width: 1;
+  fill: none;
+  opacity: 0.2;
+}
+
+.wave-line-cyan-strong {
+  stroke: #06b6d4;
+  stroke-width: 1.5;
+  fill: none;
+  opacity: 0.3;
+}
+
+.wave-line-cyan-medium {
+  stroke: #0ea5e9;
+  stroke-width: 1.2;
+  fill: none;
+  opacity: 0.25;
+}
+
+.wave-line-cyan-light {
+  stroke: #22d3ee;
+  stroke-width: 1;
+  fill: none;
+  opacity: 0.2;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.25);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.4);
+}

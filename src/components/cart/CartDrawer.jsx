@@ -1,19 +1,25 @@
-import React from 'react';
-import { Drawer, List, Button, Typography, Empty, message } from 'antd';
-import { DeleteOutlined, ShoppingOutlined } from '@ant-design/icons';
+import { Drawer, List, Button, Typography, Empty } from 'antd';
+import { DeleteOutlined, ShoppingOutlined, PlusOutlined, MinusOutlined } from '@ant-design/icons';
+
 import { useNavigate } from 'react-router-dom';
-import useCartStore from '../store/useCartStore';
+import useCartStore from '../../store/useCartStore';
 
 const { Text, Title } = Typography;
 
-const CartDrawer = ({ open, onClose }) => {
-    const { cart, removeFromCart } = useCartStore();
-    const navigate = useNavigate();
+const CartDrawer = () => {
+    const {
+        cart,
+        removeFromCart,
+        increaseQty,
+        decreaseQty,
+        closeCart,
+        modalCartStatus,
+    } = useCartStore(); const navigate = useNavigate();
 
     const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
     const handleCheckout = () => {
-        onClose();
+        closeCart();
         navigate('/checkout');
     };
 
@@ -26,18 +32,18 @@ const CartDrawer = ({ open, onClose }) => {
                 </div>
             }
             placement="right"
-            onClose={onClose}
-            open={open}
-            width={400}
+            onClose={closeCart}
+            open={modalCartStatus}
+
             className="backdrop-blur-sm"
         >
-            {cart.length === 0 ? (
+            {cart === undefined ? (
                 <div className="h-full flex flex-col items-center justify-center">
                     <Empty
                         image={Empty.PRESENTED_IMAGE_SIMPLE}
                         description={<Text type="secondary">Your cart is empty</Text>}
                     />
-                    <Button type="primary" onClick={onClose} className="mt-4 bg-indigo-600">
+                    <Button type="primary" onClick={closeCart} className="mt-4 bg-indigo-600">
                         Start Shopping
                     </Button>
                 </div>
@@ -75,9 +81,22 @@ const CartDrawer = ({ open, onClose }) => {
                                                     <Text className="text-indigo-600 font-medium">
                                                         ${item.price.toFixed(2)}
                                                     </Text>
-                                                    <Text type="secondary" className="text-xs">
-                                                        Qty: {item.quantity}
-                                                    </Text>
+                                                    <div className="flex items-center gap-2">
+                                                        <Button
+                                                            size="small"
+                                                            icon={<MinusOutlined />}
+                                                            onClick={() => decreaseQty(item.id)}
+                                                            disabled={item.quantity === 1}
+                                                        />
+
+                                                        <Text className="w-6 text-center">{item.quantity}</Text>
+
+                                                        <Button
+                                                            size="small"
+                                                            icon={<PlusOutlined />}
+                                                            onClick={() => increaseQty(item.id)}
+                                                        />
+                                                    </div>
                                                 </div>
                                             </div>
                                         }
@@ -90,7 +109,7 @@ const CartDrawer = ({ open, onClose }) => {
                     <div className="border-t pt-4 mt-4 bg-white">
                         <div className="flex justify-between items-center mb-4">
                             <Text className="text-lg font-medium text-gray-600">Total</Text>
-                            <Title level={3} className="!m-0 !text-indigo-700">
+                            <Title level={3} className="m-0! text-indigo-700!">
                                 ${total.toFixed(2)}
                             </Title>
                         </div>
