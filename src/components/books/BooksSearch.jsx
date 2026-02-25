@@ -11,10 +11,10 @@ const BooksSearch = () => {
 
   const onChange = (e) => {
     const value = e.target.value;
-     setInputValue(value);
+    setInputValue(value);
     searchBooks(fetchBooks);
-    console.log(value);
-   
+
+
   };
 
   return (
