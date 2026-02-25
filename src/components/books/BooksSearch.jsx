@@ -13,6 +13,8 @@ const BooksSearch = () => {
   const onChange = (e) => {
     const value = e.target.value;
     setInputValue(value);
+    if (value.length < 5) return;
+
     searchBooks(fetchBooks);
 
 

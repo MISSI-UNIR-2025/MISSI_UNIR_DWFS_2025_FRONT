@@ -6,7 +6,7 @@ import { useApiBooks } from '../../hooks/useApiBooks';
 const { Text } = Typography;
 
 const BooksLoader = () => {
-  const { loadMoreBooks, loading, hasMore,query,changePage } = useBooksStore();
+  const { loadMoreBooks, loading, hasMore, query, changePage } = useBooksStore();
   const { fetchBooks } = useApiBooks();
   const ref = useRef(null);
 
@@ -14,8 +14,9 @@ const BooksLoader = () => {
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
-          changePage(query.page+1);
-          loadMoreBooks(fetchBooks); // ✅ AQUÍ está el cambio clave
+
+          loadMoreBooks(fetchBooks);
+          changePage(query.page + 1);
         }
       },
       { threshold: 1 }

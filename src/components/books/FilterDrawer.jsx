@@ -46,7 +46,7 @@ export default function FilterDrawer({ onFiltersChange }) {
     const [showAllCategories, setShowAllCategories] = useState(false);
     const [showAllAuthors, setShowAllAuthors] = useState(false);
 
-    const { facets, setAdvancedFilters, loadMoreBooks } = useBooksStore();
+    const { facets, setAdvancedFilters, searchBooks } = useBooksStore();
 
     const [selected, setSelected] = useState({
         categories: [],
@@ -183,7 +183,7 @@ export default function FilterDrawer({ onFiltersChange }) {
     const searchResult = () => {
         setOpen(false);
         setAdvancedFilters(selected);
-       // searchBooks(fetchBooks);
+        searchBooks(fetchBooks);
 
     }
 

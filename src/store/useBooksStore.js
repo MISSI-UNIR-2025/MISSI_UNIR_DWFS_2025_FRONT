@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { buildQuery } from '../services/buildQueryService';
+import { getPriceRange } from '../components/utils/utils';
 
 
 const PAGE_SIZE = 20;
@@ -13,7 +14,8 @@ const useBooksStore = create((set, get) => ({
   query: {
     query: "",
     autocomplete: "",
-    categoryName: "",
+    categoryName: [],
+    authorName: [],
     authorId: "",
     rating: "",
     minRating: "",
@@ -59,7 +61,7 @@ const useBooksStore = create((set, get) => ({
     set({ loading: true });
 
     const booksApi = await fetchBooks({ query });
-    const facets = booksApi.facets
+
     const newBooks = booksApi.content.map((book) => ({
       id: book.id,
       title: book.title,
@@ -75,7 +77,7 @@ const useBooksStore = create((set, get) => ({
       books: [...state.books, ...newBooks],
       hasMore: newBooks.length > 0,
       loading: false,
-      facets: facets,
+
       query: query,
     }));
   },
@@ -112,13 +114,45 @@ const useBooksStore = create((set, get) => ({
     }));
 
   },
-  
+
+  setAdvancedFilters: (filters) => {
+    const { minPrice, maxPrice } = getPriceRange(filters.priceRanges);
+    const { query } = get();
+    query.page = 0;
+    query.categoryName = filters.categories;
+    query.authorName = filters.authors;
+    query.rating = filters.ratings.length > 0
+      ? Math.min(...filters.ratings.map(Number))
+      : "";
+    query.minPrice = minPrice;
+    query.maxPrice = maxPrice;
+
+    set({
+      query: query
+
+    });
+
+
+
+  },
+
 
   changePage: (page) => {
     const { query } = get();
     query.page = page;
     set({
       query: query
+
+    });
+  },
+
+  loadFacets: async (fetchFacets) => {
+
+    const facets = await fetchFacets();
+
+
+    set({
+      facets: facets
 
     });
   }

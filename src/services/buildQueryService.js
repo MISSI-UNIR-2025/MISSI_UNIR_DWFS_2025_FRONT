@@ -17,6 +17,5 @@ export const buildQuery = (filters) => {
 
         params.append(key, value);
     });
-
     return params.toString();
 };

@@ -14,10 +14,16 @@ export const useApiBooks = () => {
     const fetchBookById = useCallback(async (id) => {
         const res = await fetch(`${API.BASE_URL}${API.apis.BookById(id)}`);
         const data = await res.json();
-
         return data;
 
     }, []);
 
-    return { fetchBooks, fetchBookById };
+    const fetchFacets = useCallback(async () => {
+        const res = await fetch(`${API.BASE_URL}${API.apis.Facets}`);
+        const data = await res.json();
+        return data;
+
+    },  []);
+
+    return { fetchBooks, fetchBookById , fetchFacets};
 };
