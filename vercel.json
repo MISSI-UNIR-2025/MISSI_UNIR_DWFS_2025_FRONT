@@ -1,8 +1,12 @@
 {
-  "rewrites": [
-    {
-      "source": "/api/:path*",
-      "destination": "https://missiunirdwfs2025backapigateway-production.up.railway.app/:path*"
-    }
-  ]
+    "rewrites": [
+        {
+            "source": "/api/:path*",
+            "destination": "https://missiunirdwfs2025backapigateway-production.up.railway.app/:path*"
+        },
+        {
+            "source": "/(.*)",
+            "destination": "/"
+        }
+    ]
 }
