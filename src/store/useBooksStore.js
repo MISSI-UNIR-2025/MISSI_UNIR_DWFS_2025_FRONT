@@ -1,25 +1,42 @@
 import { create } from 'zustand';
+import { buildQuery } from '../services/buildQueryService';
+
 
 const PAGE_SIZE = 20;
 const MIN_SEARCH_CHARS = 5;
 
-const buildQuery = (text) => {
-  const t = text.trim();
-  if (t.length >= MIN_SEARCH_CHARS) {
-    return `intitle:"${t}"`;
-  }
-  return 'subject:fiction';
-};
+
 
 const useBooksStore = create((set, get) => ({
   books: [],
   inputValue: '',
-  query: 'subject:fiction',
+  query: {
+    query: "",
+    autocomplete: "",
+    categoryName: "",
+    authorId: "",
+    rating: "",
+    minRating: "",
+    minPrice: "",
+    maxPrice: "",
+    sortBy: "publicationDate",
+    sortOrder: "desc",
+    page: 0,
+    size: 10,
+  },
   startIndex: 0,
   loading: false,
   hasMore: true,
 
-  setInputValue: (value) => set({ inputValue: value }),
+  setInputValue: (value) =>  {
+
+    let { query } = get();
+    query.query = value;
+    query.page = 0;
+
+    set({ inputValue: value, query: query });
+
+  },
 
   resetSearch: () =>
     set({
@@ -29,41 +46,77 @@ const useBooksStore = create((set, get) => ({
     }),
 
   loadMoreBooks: async (fetchBooks) => {
-    const { loading, hasMore, query, startIndex } = get();
-    if (loading || !hasMore) return;
+    
+     const { loading, hasMore, query } = get();
+     if (loading || !hasMore) return;
 
-    set({ loading: true });
+     set({ loading: true });
 
-    const newBooks = await fetchBooks({ query, startIndex });
+     const booksApi = await fetchBooks({ query });
+     const newBooks = booksApi.content.map((book) => ({
+       id: book.id,
+       title: book.title,
+       author: book.author.name,
+       image: book.imageUrl,
+       description: book.description,
+       category: book.category.name,
+       price: book.price,
+       rating: book.rating,
+     }));
 
     set((state) => ({
       books: [...state.books, ...newBooks],
-      startIndex: state.startIndex + PAGE_SIZE,
       hasMore: newBooks.length > 0,
       loading: false,
+      query: query,
     }));
   },
 
   searchBooks: async (fetchBooks) => {
-    const { inputValue } = get();
-    const query = buildQuery(inputValue);
+   
+  
 
-    set({
-      query,
+const { query } = get();
+
+     set({ loading: true });
+   set({
+     
       books: [],
-      startIndex: 0,
+     
       hasMore: true,
     });
+     const booksApi = await fetchBooks({ query });
+     const newBooks = booksApi.content.map((book) => ({
+       id: book.id,
+       title: book.title,
+       author: book.author.name,
+       image: book.imageUrl,
+       description: book.description,
+       category: book.category.name,
+       price: book.price,
+       rating: book.rating,
+     }));
 
-    const newBooks = await fetchBooks({ query, startIndex: 0 });
-
-    set({
-      books: newBooks,
-      startIndex: PAGE_SIZE,
+    set((state) => ({
+      books: [...state.books, ...newBooks],
       hasMore: newBooks.length > 0,
       loading: false,
+      query: query,
+    }));
+
+
+
+   },
+
+  changequery:(page)=>{
+    const { query } = get();
+    query.page = page;
+    set({
+      query: query
+     
     });
-  },
+  }
+
 }));
 
 export default useBooksStore;

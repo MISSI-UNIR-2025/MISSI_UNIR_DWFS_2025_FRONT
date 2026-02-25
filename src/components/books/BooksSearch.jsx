@@ -1,21 +1,20 @@
 import { Input, Typography } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import useBooksStore from '../../store/useBooksStore';
-import { useGoogleBooks } from '../../hooks/useGoogleBooks';
+import { useApiBooks } from '../../hooks/useApiBooks';
 
 const { Title, Text } = Typography;
 
 const BooksSearch = () => {
-  const { fetchBooks } = useGoogleBooks();
-  const { inputValue, setInputValue, searchBooks } = useBooksStore();
+  const { fetchBooks } = useApiBooks();
+  const { inputValue, setInputValue, searchBooks, query } = useBooksStore();
 
   const onChange = (e) => {
     const value = e.target.value;
-    setInputValue(value);
-
-    if (value.trim().length >= 5 || value.trim().length === 0) {
-      searchBooks(fetchBooks);
-    }
+     setInputValue(value);
+    searchBooks(fetchBooks);
+    console.log(value);
+   
   };
 
   return (
@@ -31,7 +30,7 @@ const BooksSearch = () => {
       <div className="max-w-xl mx-auto mt-8">
         <Input
           size="large"
-          value={inputValue}
+          value={query.query}
           placeholder="Search by book title (min 5 chars)"
           prefix={<SearchOutlined />}
           onChange={onChange}

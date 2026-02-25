@@ -20,6 +20,11 @@ git clone https://github.com/samuelcalderonhuaccha/DWFS-2026.git
 ```bash
 npm install
 ```
+3. Create a .env file in the root directory and add the following content
+```
+VITE_API_URL=http://localhost:8081
+```
+
 
 3. Start the application
 
