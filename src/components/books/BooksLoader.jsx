@@ -1,19 +1,20 @@
 import { useEffect, useRef } from 'react';
 import { Spin, Typography } from 'antd';
 import useBooksStore from '../../store/useBooksStore';
-import { useGoogleBooks } from '../../hooks/useGoogleBooks';
+import { useApiBooks } from '../../hooks/useApiBooks';
 
 const { Text } = Typography;
 
 const BooksLoader = () => {
-  const { loadMoreBooks, loading, hasMore } = useBooksStore();
-  const { fetchBooks } = useGoogleBooks();
+  const { loadMoreBooks, loading, hasMore,query,changequery } = useBooksStore();
+  const { fetchBooks } = useApiBooks();
   const ref = useRef(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
+          changequery(query.page+1);
           loadMoreBooks(fetchBooks); // ✅ AQUÍ está el cambio clave
         }
       },

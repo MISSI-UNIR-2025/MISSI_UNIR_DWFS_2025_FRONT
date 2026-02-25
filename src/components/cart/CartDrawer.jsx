@@ -68,7 +68,7 @@ const CartDrawer = () => {
                                     <List.Item.Meta
                                         avatar={
                                             <img
-                                                src={item.image}
+                                                src={item.imageUrl}
                                                 alt={item.title}
                                                 className="w-16 h-20 object-cover rounded shadow-sm"
                                             />
