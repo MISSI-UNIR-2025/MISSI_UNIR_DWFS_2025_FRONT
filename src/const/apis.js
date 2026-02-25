@@ -3,6 +3,7 @@ export const API ={
 
     apis:{
         BooksSearch:"/ms-books-catalogue/api/books/open-search",
-        BookById: (id)=>`/ms-books-catalogue/api/books/${id}`
+        BookById: (id)=>`/ms-books-catalogue/api/books/${id}`,
+        Facets:"/ms-books-catalogue/api/books/facets"
     }
 }

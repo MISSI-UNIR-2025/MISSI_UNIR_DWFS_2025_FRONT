@@ -108,3 +108,16 @@ body {
 *::-webkit-scrollbar-thumb:hover {
   background-color: rgba(0, 0, 0, 0.4);
 }
+
+.ant-collapse-content>.ant-collapse-content-box {
+  padding: 4px 0 8px !important;
+}
+
+.ant-collapse>.ant-collapse-item>.ant-collapse-header {
+  padding: 7px 0 !important;
+  align-items: center !important;
+}
+
+.ant-collapse-ghost>.ant-collapse-item>.ant-collapse-content {
+  padding: 0 !important;
+}

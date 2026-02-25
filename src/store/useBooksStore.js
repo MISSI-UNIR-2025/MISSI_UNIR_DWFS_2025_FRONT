@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { buildQuery } from '../services/buildQueryService';
+import { getPriceRange } from '../components/utils/utils';
 
 
 const PAGE_SIZE = 20;
@@ -13,7 +14,8 @@ const useBooksStore = create((set, get) => ({
   query: {
     query: "",
     autocomplete: "",
-    categoryName: "",
+    categoryName: [],
+    authorName: [],
     authorId: "",
     rating: "",
     minRating: "",
@@ -24,11 +26,17 @@ const useBooksStore = create((set, get) => ({
     page: 0,
     size: 10,
   },
+  facets: {
+    categories: [],
+    authors: [],
+    ratings: [],
+    priceRanges: []
+  },
   startIndex: 0,
   loading: false,
   hasMore: true,
 
-  setInputValue: (value) =>  {
+  setInputValue: (value) => {
 
     let { query } = get();
     query.query = value;
@@ -46,56 +54,57 @@ const useBooksStore = create((set, get) => ({
     }),
 
   loadMoreBooks: async (fetchBooks) => {
-    
-     const { loading, hasMore, query } = get();
-     if (loading || !hasMore) return;
 
-     set({ loading: true });
+    const { loading, hasMore, query } = get();
+    if (loading || !hasMore) return;
 
-     const booksApi = await fetchBooks({ query });
-     const newBooks = booksApi.content.map((book) => ({
-       id: book.id,
-       title: book.title,
-       author: book.author.name,
-       image: book.imageUrl,
-       description: book.description,
-       category: book.category.name,
-       price: book.price,
-       rating: book.rating,
-     }));
+    set({ loading: true });
+
+    const booksApi = await fetchBooks({ query });
+
+    const newBooks = booksApi.content.map((book) => ({
+      id: book.id,
+      title: book.title,
+      author: book.author.name,
+      image: book.imageUrl,
+      description: book.description,
+      category: book.category.name,
+      price: book.price,
+      rating: book.rating,
+    }));
 
     set((state) => ({
       books: [...state.books, ...newBooks],
       hasMore: newBooks.length > 0,
       loading: false,
+
       query: query,
     }));
   },
 
   searchBooks: async (fetchBooks) => {
-   
-  
 
-const { query } = get();
 
-     set({ loading: true });
-   set({
-     
+
+    const { query } = get();
+
+    set({ loading: true });
+    set({
+
       books: [],
-     
       hasMore: true,
     });
-     const booksApi = await fetchBooks({ query });
-     const newBooks = booksApi.content.map((book) => ({
-       id: book.id,
-       title: book.title,
-       author: book.author.name,
-       image: book.imageUrl,
-       description: book.description,
-       category: book.category.name,
-       price: book.price,
-       rating: book.rating,
-     }));
+    const booksApi = await fetchBooks({ query });
+    const newBooks = booksApi.content.map((book) => ({
+      id: book.id,
+      title: book.title,
+      author: book.author.name,
+      image: book.imageUrl,
+      description: book.description,
+      category: book.category.name,
+      price: book.price,
+      rating: book.rating,
+    }));
 
     set((state) => ({
       books: [...state.books, ...newBooks],
@@ -104,16 +113,47 @@ const { query } = get();
       query: query,
     }));
 
+  },
+
+  setAdvancedFilters: (filters) => {
+    const { minPrice, maxPrice } = getPriceRange(filters.priceRanges);
+    const { query } = get();
+    query.page = 0;
+    query.categoryName = filters.categories;
+    query.authorName = filters.authors;
+    query.rating = filters.ratings.length > 0
+      ? Math.min(...filters.ratings.map(Number))
+      : "";
+    query.minPrice = minPrice;
+    query.maxPrice = maxPrice;
+
+    set({
+      query: query
+
+    });
 
 
-   },
 
-  changequery:(page)=>{
+  },
+
+
+  changePage: (page) => {
     const { query } = get();
     query.page = page;
     set({
       query: query
-     
+
+    });
+  },
+
+  loadFacets: async (fetchFacets) => {
+
+    const facets = await fetchFacets();
+
+
+    set({
+      facets: facets
+
     });
   }
 
