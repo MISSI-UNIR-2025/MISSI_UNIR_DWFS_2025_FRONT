@@ -24,11 +24,17 @@ const useBooksStore = create((set, get) => ({
     page: 0,
     size: 10,
   },
+  facets: {
+    categories: [],
+    authors: [],
+    ratings: [],
+    priceRanges: []
+  },
   startIndex: 0,
   loading: false,
   hasMore: true,
 
-  setInputValue: (value) =>  {
+  setInputValue: (value) => {
 
     let { query } = get();
     query.query = value;
@@ -46,56 +52,57 @@ const useBooksStore = create((set, get) => ({
     }),
 
   loadMoreBooks: async (fetchBooks) => {
-    
-     const { loading, hasMore, query } = get();
-     if (loading || !hasMore) return;
 
-     set({ loading: true });
+    const { loading, hasMore, query } = get();
+    if (loading || !hasMore) return;
 
-     const booksApi = await fetchBooks({ query });
-     const newBooks = booksApi.content.map((book) => ({
-       id: book.id,
-       title: book.title,
-       author: book.author.name,
-       image: book.imageUrl,
-       description: book.description,
-       category: book.category.name,
-       price: book.price,
-       rating: book.rating,
-     }));
+    set({ loading: true });
+
+    const booksApi = await fetchBooks({ query });
+    const facets = booksApi.facets
+    const newBooks = booksApi.content.map((book) => ({
+      id: book.id,
+      title: book.title,
+      author: book.author.name,
+      image: book.imageUrl,
+      description: book.description,
+      category: book.category.name,
+      price: book.price,
+      rating: book.rating,
+    }));
 
     set((state) => ({
       books: [...state.books, ...newBooks],
       hasMore: newBooks.length > 0,
       loading: false,
+      facets: facets,
       query: query,
     }));
   },
 
   searchBooks: async (fetchBooks) => {
-   
-  
 
-const { query } = get();
 
-     set({ loading: true });
-   set({
-     
+
+    const { query } = get();
+
+    set({ loading: true });
+    set({
+
       books: [],
-     
       hasMore: true,
     });
-     const booksApi = await fetchBooks({ query });
-     const newBooks = booksApi.content.map((book) => ({
-       id: book.id,
-       title: book.title,
-       author: book.author.name,
-       image: book.imageUrl,
-       description: book.description,
-       category: book.category.name,
-       price: book.price,
-       rating: book.rating,
-     }));
+    const booksApi = await fetchBooks({ query });
+    const newBooks = booksApi.content.map((book) => ({
+      id: book.id,
+      title: book.title,
+      author: book.author.name,
+      image: book.imageUrl,
+      description: book.description,
+      category: book.category.name,
+      price: book.price,
+      rating: book.rating,
+    }));
 
     set((state) => ({
       books: [...state.books, ...newBooks],
@@ -104,16 +111,15 @@ const { query } = get();
       query: query,
     }));
 
+  },
+  
 
-
-   },
-
-  changequery:(page)=>{
+  changePage: (page) => {
     const { query } = get();
     query.page = page;
     set({
       query: query
-     
+
     });
   }
 

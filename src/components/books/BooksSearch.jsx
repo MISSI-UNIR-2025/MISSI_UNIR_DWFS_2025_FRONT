@@ -2,6 +2,7 @@ import { Input, Typography } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import useBooksStore from '../../store/useBooksStore';
 import { useApiBooks } from '../../hooks/useApiBooks';
+import FilterDrawer from './FilterDrawer';
 
 const { Title, Text } = Typography;
 
@@ -27,7 +28,7 @@ const BooksSearch = () => {
         Explore our handpicked selection of timeless classics and modern hits.
       </Text>
 
-      <div className="max-w-xl mx-auto mt-8">
+      <div className="max-w-xl mx-auto mt-8 flex gap-2 items-center">
         <Input
           size="large"
           value={query.query}
@@ -36,6 +37,7 @@ const BooksSearch = () => {
           onChange={onChange}
           className="rounded-full px-6 py-3"
         />
+        <FilterDrawer />
       </div>
     </div>
   );
