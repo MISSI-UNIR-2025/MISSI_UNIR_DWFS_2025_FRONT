@@ -38,7 +38,7 @@ const BookDetailPage = () => {
     };
 
     fetchBook();
-  }, [id]); // 👈 cada vez que cambia el id vuelve a buscar
+  }, [id]); 
 
   const handleAddToCart = () => {
     if (!book) return;
